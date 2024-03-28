@@ -3,11 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <title>Page de bienvenue</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    #welcome-message {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    #create-group-form, #user-groups {
+      width: 50%;
+      margin: 0 auto;
+      padding: 20px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      margin-top: 30px;
+    }
+
+    #create-group-form form {
+      margin-top: 20px;
+    }
+
+    #create-group-form form label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    #create-group-form form input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    #create-group-form form button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #create-group-form form button:hover {
+      background-color: #0056b3;
+    }
+
+    #user-groups {
+      margin-top: 30px;
+    }
+
+    .group-button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .group-button:hover {
+      background-color: #0056b3;
+    }
+
+    #logout-button {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    #logout-button a {
+      padding: 10px 20px;
+      background-color: #dc3545;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    #logout-button a:hover {
+      background-color: #bd2130;
+    }
+  </style>
 </head>
 <body>
   <div id="welcome-message">
     <p>Bienvenue, {{ nom }} !</p>
-    <a href="/deconnexion">Déconnexion</a>
   </div>
 
   <div id="create-group-form">
@@ -21,13 +108,13 @@
 
   <div id="user-groups">
     <h2>Groupes de l'utilisateur</h2>
-    <ul>
-      {% for group in user_groups %}
-        <li>{{ group }}</li>
-      {% endfor %}
-    </ul>
+    {% for group in user_groups %}
+      <a href="/groupe-details?name={{ group }}"><button class="group-button">{{ group }}</button></a>
+    {% endfor %}
   </div>
-  
+
+  <div id="logout-button">
+    <a href="/deconnexion">Déconnexion</a>
+  </div>
 </body>
 </html>
-

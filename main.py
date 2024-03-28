@@ -68,5 +68,11 @@ def nouveauGroupe():
         ServiceBdd.nouveauGroupe(group_name, session['user_id'])
     return redirect('/acceuil')
 
+@app.route('/groupe-details')
+def groupe_details():
+    group_name = request.args.get('name')
+    return render_template("groupe-details.html", group_name=group_name)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
