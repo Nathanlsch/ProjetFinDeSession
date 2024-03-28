@@ -2,11 +2,50 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Page d'accueil</title>
+  <title>Page de connexion</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f2f2f2; /* Couleur de fond */
+    }
+    .login-container {
+      text-align: center;
+      background-color: white; /* Couleur de fond de l'encadrement */
+      padding: 40px;
+      border-radius: 20px; /* Bords arrondis */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre */
+      max-width: 500px; /* Largeur maximale */
+      width: 80%; /* Largeur */
+    }
+    .login-button {
+      background-color: #415e9c; /* Couleur de fond */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+    .login-button:hover {
+      background-color: #27467e; /* Changement de couleur au survol */
+    }
+  </style>
 </head>
 <body>
-    <h1>Test</h1>
-    <!-- Utilisez un lien pour rediriger vers la page d'authentification Facebook -->
-    <a href="/login-facebook">Login</a>
+  <div class="login-container">
+    <h1>Page de connexion</h1>
+    <p>Veuillez vous connecter pour accéder au contenu.</p>
+    <a href="/login-facebook" class="login-button">Connexion avec Facebook</a>
+  </div>
 </body>
 </html>

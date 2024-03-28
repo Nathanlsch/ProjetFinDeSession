@@ -21,6 +21,7 @@ def index():
     ServiceBdd.ajoutUtilisateurGroupe("groupe6", "id_facebook")
     return render_template('test.html')
 
+
 @app.route('/login-facebook')
 def login():
     auth_url = facebook.GraphAPI().get_auth_url(app_id, redirect_uri)
