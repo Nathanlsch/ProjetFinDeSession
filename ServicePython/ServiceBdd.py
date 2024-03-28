@@ -10,7 +10,13 @@ db = firestore.client()
 
 # Ajout utilisateur
 def ajoutUtilisateur(document_id, document_data):
-    db.collection("users").document(document_id).set(document_data)
+    user_ref = db.collection("users").document(document_id)
+    user_doc = user_ref.get()
+    if user_doc.exists:
+        print(f"User '{document_id}' already exists.")
+    else:
+        user_ref.set(document_data)
+        print(f"User '{document_id}' added successfully.")
 
 # Function to delete a user
 def supprimeUtilisateur(user_id):
@@ -22,11 +28,10 @@ def supprimeUtilisateur(user_id):
     else:
         print(f"User '{user_id}' does not exist.")
 
-def CreerDonneeUtilisateur(name, email, groups):
+def CreerDonneeUtilisateur(name):
     user_data = {
         "name": name,
-        "email": email,
-        "groupes": groups
+        "groupes": []
     }
     return user_data
 

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Page de bienvenue</title>
+</head>
+<body>
+  <div id="welcome-message">
+    <p>Bienvenue, {{ nom }} !</p>
+    <a href="/deconnexion">Déconnexion</a>
+  </div>
+
+  <div id="create-group-form">
+    <h2>Créer un nouveau groupe</h2>
+    <form action="/creer-groupe" method="post">
+      <label for="group-name">Nom du groupe :</label>
+      <input type="text" id="group-name" name="group-name" required>
+      <button type="submit">Créer</button>
+    </form>
+  </div>
+
+  <div id="user-groups">
+    <h2>Groupes de l'utilisateur</h2>
+    <ul>
+      {% for group in user_groups %}
+        <li>{{ group }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  
+</body>
+</html>
+
