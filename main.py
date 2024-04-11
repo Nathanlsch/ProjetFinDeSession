@@ -76,8 +76,9 @@ def nouveauGroupe():
 def groupe_details():
     group_id = request.args.get('id')
     print("groupe id : ", group_id)
-    
-    return render_template("groupe-details.html", group_name=group_id)
+    liste_user = ServiceBdd.utilisateursParIdGroupe(group_id)
+    print(liste_user)
+    return render_template("groupe-details.html", group_name=group_id, user_list=liste_user)
 
 
 if __name__ == '__main__':

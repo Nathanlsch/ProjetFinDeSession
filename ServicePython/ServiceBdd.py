@@ -142,6 +142,28 @@ def groupesUtilisateurParIdUtilisateur(user_id):
         print(f"User '{user_id}' does not exist.")
         return []
 
+def utilisateursParIdGroupe(group_id):
+    group_ref = db.collection("groupes").document(group_id)
+    group_doc = group_ref.get()
+    if group_doc.exists:
+        group_data = group_doc.to_dict()
+        user_ids = group_data.get("users", [])
+        user_names = []
+        for user_id in user_ids:
+            user_ref = db.collection("users").document(user_id)
+            user_doc = user_ref.get()
+            if user_doc.exists:
+                user_data = user_doc.to_dict()
+                user_name = user_data.get("name", "Unknown")
+                user_names.append(user_name)
+            else:
+                print(f"User '{user_id}' does not exist.")
+        return user_names
+    else:
+        print(f"Group '{group_id}' does not exist.")
+        return []
+
+
 
 
 '''
