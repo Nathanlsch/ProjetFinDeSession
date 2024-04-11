@@ -62,19 +62,24 @@
 <body>
   <div id="group-details">
     <h1>Détails du Groupe : {{ group_name }}</h1>
-<!-- Ajoutez d'autres détails du groupe ici -->
+
+    <h3>Participants du groupe: {{ user_list }}</h3>
+    
+    {% if test_admin == 1 %}
+
     <div id = delete-button> <a href="/acceuil">Supprimer le groupe</a> </div>    
+    {% endif %}
 
     <div id = accueil-button> <a href="/acceuil">Retour à la page d'accueil</a></div>
     
 
 
-<!-- Ajouter bouton qui supprime le groupe pour l'administrateur, Ajouter affichage des utilisateurs du groupe, Ajouter le code du groupe pour inviter des utilisateurs -->
-<!-- {% if admin == 1 %} -->
+<!-- Ajouter bouton qui permet de quitter le groupe, Ajouter affichage des utilisateurs du groupe, Ajouter le code du groupe pour inviter des utilisateurs -->
 
 
 
-<!-- {% endif %} -->
+
+
 
   </div>
 </body>
