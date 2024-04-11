@@ -120,29 +120,29 @@ def ajoutUtilisateurGroupe(group_id, user_id):
     else:
         print(f"Le groupe '{group_name}' n'existe pas.")
 
-def groupesUtilisateur2(user_id):
+
+def groupesUtilisateurParIdUtilisateur(user_id):
     user_ref = db.collection("users").document(user_id)
     user_doc = user_ref.get()
     if user_doc.exists:
-        print("test")
         user_data = user_doc.to_dict()
+        group_names_ids = []
         group_ids = user_data.get("groupes", [])
-        groups_info = []
         for group_id in group_ids:
-            print(group_id)
             group_ref = db.collection("groupes").document(group_id)
             group_doc = group_ref.get()
             if group_doc.exists:
                 group_data = group_doc.to_dict()
                 group_info = {"id": group_id, "name": group_data.get("name", "Unknown")}
-                groups_info.append(group_info)
+                group_names_ids.append(group_info)
             else:
                 print(f"Group '{group_id}' does not exist.")
-        return groups_info
-        print(group_info)
+        return group_names_ids
     else:
         print(f"User '{user_id}' does not exist.")
         return []
+
+
 
 '''
 # Exemple d'utilisation

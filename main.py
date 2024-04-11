@@ -38,8 +38,9 @@ def acceuil():
         id = session['user_id']
         name = session['user_name']
         # Récupérer la liste des groupes de l'utilisateur
-        user_groups = ServiceBdd.groupesUtilisateur(session['user_id'])
-        user_groups2 = ServiceBdd.groupesUtilisateur2(session['user_id'])
+
+        liste_groupe = ServiceBdd.groupesUtilisateurParIdUtilisateur(id)
+
     else:
         code = request.args.get('code')
         access_token = facebook.GraphAPI().get_access_token_from_code(code, redirect_uri, app_id, app_secret)
@@ -53,11 +54,9 @@ def acceuil():
         session['user_id'] = id
         session['user_name'] = name
 
-        user_groups = ServiceBdd.groupesUtilisateur(session['user_id'])
-        user_groups2 = ServiceBdd.groupesUtilisateur2(session['user_id'])
-        
-    print(user_groups2)    
-    return render_template("acceuil.html", nom=name, user_groups=user_groups, user_groups2=user_groups2)
+        liste_groupe = ServiceBdd.groupesUtilisateurParIdUtilisateur(id)
+          
+    return render_template("acceuil.html", nom=name, user_groups2=liste_groupe)
 
 @app.route('/deconnexion')
 def deconnexion():
@@ -76,7 +75,8 @@ def nouveauGroupe():
 @app.route('/groupe-details')
 def groupe_details():
     group_id = request.args.get('id')
-    print(group_id)
+    print("groupe id : ", group_id)
+    
     return render_template("groupe-details.html", group_name=group_id)
 
 
