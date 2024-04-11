@@ -174,6 +174,17 @@ def estAdminDuGroupe(user_id, group_id):
         print(f"Group '{group_id}' does not exist.")
         return False
 
+def nomDuGroupeParId(group_id):
+    group_ref = db.collection("groupes").document(group_id)
+    group_doc = group_ref.get()
+    if group_doc.exists:
+        group_data = group_doc.to_dict()
+        return group_data.get("name", "Unknown")
+    else:
+        print(f"Group '{group_id}' does not exist.")
+        return None
+
+
 
 
 

@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, session
-from flask_cors import CORS  # Importez Flask-CORS
 import facebook
 import sys
 import os
@@ -77,7 +76,8 @@ def groupe_details():
     group_id = request.args.get('id')
     liste_user = ServiceBdd.utilisateursParIdGroupe(group_id)
     admin = ServiceBdd.estAdminDuGroupe(session['user_id'], group_id)
-    return render_template("groupe-details.html", group_name=group_id, user_list=liste_user, test_admin = admin)
+    name = ServiceBdd.nomDuGroupeParId(group_id)
+    return render_template("groupe-details.html", group_name=name, group_id=group_id, user_list=liste_user, test_admin = admin)
 
 
 if __name__ == '__main__':
