@@ -18,9 +18,9 @@
       border-radius: 10px;
       margin-top: 50px;
       display: flex; /* Use flexbox */
-      justify-content: space-between; /* Align items horizontally with space between */
-      align-items: center; /* Center items vertically */
-      
+      flex-direction: column; /* Stack items vertically */
+      justify-content: center; /* Align items vertically */
+      align-items: center; /* Center items horizontally */
     }
 
     h1 {
@@ -31,7 +31,7 @@
     .button-container {
       display: flex;
       justify-content: space-between;
-      margin-bottom:10px;
+      width: 100%; /* Ensure the container takes full width */
     }
 
     a {
@@ -48,21 +48,13 @@
     a:hover {
       background-color: #0056b3;
     }
+
     #delete-button a {
       background-color: #dc3545;
-      margin-left: 5px;
-      margin-right: 5px;
-      
-      flex-direction: column;
     }
 
     #delete-button a:hover {
       background-color: #bd2130;
-    }
-
-    #accueil-button a {
-    
-      flex-direction: column; /* Stack items vertically */
     }
 
   </style>
