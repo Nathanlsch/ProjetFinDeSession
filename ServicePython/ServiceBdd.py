@@ -163,6 +163,18 @@ def utilisateursParIdGroupe(group_id):
         print(f"Group '{group_id}' does not exist.")
         return []
 
+def estAdminDuGroupe(user_id, group_id):
+    group_ref = db.collection("groupes").document(group_id)
+    group_doc = group_ref.get()
+    if group_doc.exists:
+        group_data = group_doc.to_dict()
+        admin_id = group_data.get("admin")
+        return user_id == admin_id
+    else:
+        print(f"Group '{group_id}' does not exist.")
+        return False
+
+
 
 
 

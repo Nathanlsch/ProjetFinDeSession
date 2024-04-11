@@ -75,10 +75,9 @@ def nouveauGroupe():
 @app.route('/groupe-details')
 def groupe_details():
     group_id = request.args.get('id')
-    print("groupe id : ", group_id)
     liste_user = ServiceBdd.utilisateursParIdGroupe(group_id)
-    print(liste_user)
-    return render_template("groupe-details.html", group_name=group_id, user_list=liste_user)
+    admin = ServiceBdd.estAdminDuGroupe(session['user_id'], group_id)
+    return render_template("groupe-details.html", group_name=group_id, user_list=liste_user, test_admin = admin)
 
 
 if __name__ == '__main__':
