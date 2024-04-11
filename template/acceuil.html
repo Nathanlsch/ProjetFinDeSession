@@ -114,6 +114,15 @@
       <a href="/groupe-details?id={{ group.id }}"><button class="group-button">{{ group.name }}</button></a>
     {% endfor %}
   </div>
+
+  <div id="create-group-form">
+    <h2>Rejoindre un nouveau groupe</h2>
+    <form action="/rejoindre-groupe" method="post">
+      <label for="group-name">Identifiant du groupe :</label>
+      <input type="text" id="group-name" name="group-name" required>
+      <button type="submit">Rejoindre</button>
+    </form>
+  </div>
   
   <div id="logout-button">
     <a href="/deconnexion">Déconnexion</a>
