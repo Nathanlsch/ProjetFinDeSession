@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Détails du Groupe</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    #group-details {
+      width: 50%;
+      margin: 0 auto;
+      padding: 20px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      margin-top: 50px;
+      display: flex; /* Use flexbox */
+      justify-content: space-between; /* Align items horizontally with space between */
+      align-items: center; /* Center items vertically */
+      
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom:10px;
+    }
+
+    a {
+      display: block;
+      width: fit-content;
+      margin: 10px auto;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    a:hover {
+      background-color: #0056b3;
+    }
+    #delete-button a {
+      background-color: #dc3545;
+      margin-left: 5px;
+      margin-right: 5px;
+      
+      flex-direction: column;
+    }
+
+    #delete-button a:hover {
+      background-color: #bd2130;
+    }
+
+    #accueil-button a {
+    
+      flex-direction: column; /* Stack items vertically */
+    }
+
+  </style>
+</head>
+<body>
+  <div id="group-details">
+    <h1>Détails du Groupe : {{ group_name }}</h1>
+<!-- Ajoutez d'autres détails du groupe ici -->
+    <div id = delete-button> <a href="/acceuil">Supprimer le groupe</a> </div>    
+
+    <div id = accueil-button> <a href="/acceuil">Retour à la page d'accueil</a></div>
+    
+
+
+<!-- Ajouter bouton qui supprime le groupe pour l'administrateur, Ajouter affichage des utilisateurs du groupe, Ajouter le code du groupe pour inviter des utilisateurs -->
+<!-- {% if admin == 1 %} -->
+
+
+
+<!-- {% endif %} -->
+
+  </div>
+</body>
+</html>
