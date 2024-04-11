@@ -92,6 +92,8 @@
     }
   </style>
 </head>
+
+
 <body>
   <div id="welcome-message">
     <p>Bienvenue, {{ nom }} !</p>
@@ -108,11 +110,11 @@
 
   <div id="user-groups">
     <h2>Groupes de l'utilisateur</h2>
-    {% for group in user_groups %}
-      <a href="/groupe-details?name={{ group }}"><button class="group-button">{{ group }}</button></a>
+    {% for group in user_groups2 %}
+      <a href="/groupe-details?id={{ group.id }}"><button class="group-button">{{ group.name }}</button></a>
     {% endfor %}
   </div>
-
+  
   <div id="logout-button">
     <a href="/deconnexion">Déconnexion</a>
   </div>

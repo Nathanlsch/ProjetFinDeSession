@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, session
+from flask_cors import CORS  # Importez Flask-CORS
 import facebook
 import sys
 import os
@@ -7,6 +8,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), 'ServicePython'))
 
 import ServiceBdd
+
 
 # Facebook app credentials
 app_id = '1721756045020268'
@@ -37,6 +39,7 @@ def acceuil():
         name = session['user_name']
         # Récupérer la liste des groupes de l'utilisateur
         user_groups = ServiceBdd.groupesUtilisateur(session['user_id'])
+        user_groups2 = ServiceBdd.groupesUtilisateur2(session['user_id'])
     else:
         code = request.args.get('code')
         access_token = facebook.GraphAPI().get_access_token_from_code(code, redirect_uri, app_id, app_secret)
@@ -51,8 +54,10 @@ def acceuil():
         session['user_name'] = name
 
         user_groups = ServiceBdd.groupesUtilisateur(session['user_id'])
-
-    return render_template("acceuil.html", nom=name, user_groups=user_groups)
+        user_groups2 = ServiceBdd.groupesUtilisateur2(session['user_id'])
+        
+    print(user_groups2)    
+    return render_template("acceuil.html", nom=name, user_groups=user_groups, user_groups2=user_groups2)
 
 @app.route('/deconnexion')
 def deconnexion():
@@ -70,8 +75,9 @@ def nouveauGroupe():
 
 @app.route('/groupe-details')
 def groupe_details():
-    group_name = request.args.get('name')
-    return render_template("groupe-details.html", group_name=group_name)
+    group_id = request.args.get('id')
+    print(group_id)
+    return render_template("groupe-details.html", group_name=group_id)
 
 
 if __name__ == '__main__':
