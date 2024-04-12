@@ -1,5 +1,6 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
+import json
 
 # Initialise l'app FireStore
 cred = credentials.Certificate("ServicePython/config.json")
@@ -92,7 +93,8 @@ def nouveauGroupe(group_name, user_id):
     group_data = {
         "name": group_name,
         "admin" : user_id,
-        "users": [user_id]
+        "users": [user_id],
+        "events" : []
     }
     #Ajoute le groupe au tableau des groupes dans la bdd
 
@@ -201,3 +203,54 @@ def supprimeGroupe(group_id):
         print(f"Groupe '{group_id}' supprimé avec succès.")
     else:
         print(f"Groupe '{group_id}' n'existe pas.")
+
+def ajouter_evenement_groupe(event_json, group_id):
+    # Convertir l'objet JSON en dictionnaire Python
+    event_data = json.loads(event_json)
+        
+    # Référence du groupe dans la base de données
+    group_ref = db.collection("groupes").document(group_id)
+        
+    # Obtenir le document du groupe
+    group_doc = group_ref.get()
+        
+    # Vérifier si le groupe existe dans la base de données
+    if group_doc.exists:
+        # Obtenir les données du groupe
+        group_data = group_doc.to_dict()
+            
+        # Obtenir la liste des événements actuels du groupe
+        events = group_data.get("events", [])
+            
+        # Ajouter le nouvel événement à la liste des événements
+        events.append(event_data)
+            
+        # Mettre à jour les données du groupe avec la nouvelle liste d'événements
+        group_ref.update({"events": events})
+            
+        print("Événement ajouté avec succès au groupe", group_id)
+    else:
+        print("Le groupe", group_id, "n'existe pas dans la base de données.")
+
+def liste_evenements_groupe(group_id):
+    # Référence du groupe dans la base de données
+    group_ref = db.collection("groupes").document(group_id)
+    
+    # Obtenir le document du groupe
+    group_doc = group_ref.get()
+    
+    # Vérifier si le groupe existe dans la base de données
+    if group_doc.exists:
+        # Obtenir les données du groupe
+        group_data = group_doc.to_dict()
+        
+        # Obtenir la liste des événements du groupe
+        events = group_data.get("events", [])
+        
+        # Retourner la liste des événements (convertis en JSON)
+        return events
+    else:
+        print("Le groupe", group_id, "n'existe pas dans la base de données.")
+        return []
+
+

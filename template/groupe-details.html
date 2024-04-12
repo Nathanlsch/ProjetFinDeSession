@@ -16,7 +16,7 @@
    
 </head>
 <body>
-  
+
   <div id="group-details">
     <h1>Détails du Groupe : {{ group_name }}</h1>
     <h3>Identifiant du groupe: {{ group_id }}</h3>
@@ -27,14 +27,17 @@
     </div>
 
     <!-- Formulaire de saisie des créneaux -->
-      <form id="creneau-form" action="/sauvegarder-creneau" method="post">
+    <form id="creneau-form" action="/sauvegarder-creneau" method="post" onsubmit="submitForm(event)">
         <h2>Ajouter un Créneau</h2>
+        <label for="titre">Titre :</label>
+        <input type="text" id="titre" name="titre" required>
         <label for="date">Date :</label>
         <input type="text" id="date" name="date" required>
         <label for="heure-debut">Heure de début :</label>
         <input type="text" id="heure-debut" name="heure-debut" required>
         <label for="heure-fin">Heure de fin :</label>
         <input type="text" id="heure-fin" name="heure-fin" required>
+        <input type="hidden" id="group-id" name="group-id" value="{{ group_id }}">
         <input type="submit" value="Ajouter Créneau">
       </form>
 
@@ -59,6 +62,32 @@
     $(function() {
       $("#heure-debut, #heure-fin").timepicker({ timeFormat: 'H:i', dropdown: false });
     });
+
+    function submitForm(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du formulaire
+
+        // Récupérer les données du formulaire
+        var formData = $('#creneau-form').serialize();
+
+        // Envoyer les données du formulaire au serveur de manière asynchrone
+        $.ajax({
+            type: 'POST',
+            url: '/sauvegarder-creneau',
+            data: formData,
+            success: function(response) {
+                // Faire quelque chose en cas de succès, par exemple afficher un message de confirmation
+                alert('Créneau ajouté avec succès!');
+            },
+            error: function(xhr, status, error) {
+                // Gérer les erreurs en cas d'échec de la requête
+                console.error(error);
+            }
+        });
+    }
+
+
+
+
   </script>
 </body>
 </html>

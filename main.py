@@ -9,14 +9,14 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'ServicePython'))
 
 import ServiceBdd
 
-events = [
-    {"title": "Réunion", "start": "2024-04-12T10:00:00", "end": "2024-04-12T11:30:00"},
-    {"title": "Cours de mathématiques", "start": "2024-04-13T14:00:00", "end": "2024-04-13T16:00:00"},
-    {"title": "Cours de mathématiques", "start": "2024-04-14T14:00:00", "end": "2024-04-13T16:00:00"},
-    {"title": "Cours de mathématiques", "start": "2024-04-15T14:00:00", "end": "2024-04-13T16:00:00"},
-    {"title": "Cours de mathématiques", "start": "2024-04-16T14:00:00", "end": "2024-04-13T16:00:00"}
-    # Ajoutez d'autres événements au besoin
-]
+def creer_evenement_json(date, heure_debut, heure_fin, titre):
+    # Créer un objet JSON avec les clés "title", "start" et "end"
+    evenement = {
+        "title": titre,
+        "start": f"{date}T{heure_debut}:00",
+        "end": f"{date}T{heure_fin}:00"
+    }
+    return json.dumps(evenement)
 
 
 # Facebook app credentials
@@ -105,7 +105,25 @@ def supprimer_groupe():
 @app.route('/calendrier-groupe')
 def calendrier_groupe():
     group_id = request.args.get('id')
+    events = ServiceBdd.liste_evenements_groupe(group_id)
+    print(events)
     return render_template('emploi_du_temps.html', events=json.dumps(events), group_id=group_id)
+
+@app.route('/sauvegarder-creneau', methods=['POST'])
+def sauvegarder_creneau():
+    if request.method == 'POST':
+        # Récupérer les données du formulaire
+        titre = request.form.get('titre')
+        date = request.form.get('date')
+        heure_debut = request.form.get('heure-debut')
+        heure_fin = request.form.get('heure-fin')
+        group_id = request.form.get('group-id')
+
+        json = creer_evenement_json(date, heure_debut,heure_fin,titre)
+        ServiceBdd.ajouter_evenement_groupe(json, group_id)
+    return 'Créneau ajouté avec succès !'
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
