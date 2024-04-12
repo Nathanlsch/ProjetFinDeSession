@@ -3,94 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Page de bienvenue</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    #welcome-message {
-      text-align: center;
-      margin-top: 50px;
-    }
-
-    #create-group-form, #user-groups {
-      width: 50%;
-      margin: 0 auto;
-      padding: 20px;
-      border: 2px solid #ccc;
-      border-radius: 10px;
-      margin-top: 30px;
-    }
-
-    #create-group-form form {
-      margin-top: 20px;
-    }
-
-    #create-group-form form label {
-      display: block;
-      margin-bottom: 10px;
-    }
-
-    #create-group-form form input[type="text"] {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      margin-bottom: 10px;
-    }
-
-    #create-group-form form button {
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    #create-group-form form button:hover {
-      background-color: #0056b3;
-    }
-
-    #user-groups {
-      margin-top: 30px;
-    }
-
-    .group-button {
-      display: inline-block;
-      padding: 10px 20px;
-      margin-right: 10px;
-      margin-bottom: 10px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .group-button:hover {
-      background-color: #0056b3;
-    }
-
-    #logout-button {
-      text-align: center;
-      margin-top: 30px;
-    }
-
-    #logout-button a {
-      padding: 10px 20px;
-      background-color: #dc3545;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-
-    #logout-button a:hover {
-      background-color: #bd2130;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="../static/style_acceuil.css">
 </head>
 
 
@@ -99,33 +12,37 @@
     <p>Bienvenue, {{ nom }} !</p>
   </div>
 
-  <div id="create-group-form">
-    <h2>Créer un nouveau groupe</h2>
-    <form action="/creer-groupe" method="post">
-      <label for="group-name">Nom du groupe :</label>
-      <input type="text" id="group-name" name="group-name" required>
-      <button type="submit">Créer</button>
-    </form>
+  <div id="create-join-groups">
+    <div id="create-group-form">
+      <h2>Créer un nouveau groupe</h2>
+      <form action="/creer-groupe" method="post">
+        <label for="group-name">Nom du groupe :</label>
+        <input type="text" id="group-name" name="group-name" required>
+        <button type="submit">Créer</button>
+      </form>
+    </div>
+  
+    <div id="join-group-form">
+      <h2>Rejoindre un groupe</h2>
+      <form action="/rejoindre-groupe" method="post">
+        <label for="group-name">Identifiant du groupe :</label>
+        <input type="text" id="group-name" name="group-name" required>
+        <button type="submit">Rejoindre</button>
+      </form>
+    </div>
   </div>
-
+  
   <div id="user-groups">
     <h2>Groupes de l'utilisateur</h2>
     {% for group in user_groups2 %}
       <a href="/groupe-details?id={{ group.id }}"><button class="group-button">{{ group.name }}</button></a>
     {% endfor %}
   </div>
-
-  <div id="create-group-form">
-    <h2>Rejoindre un nouveau groupe</h2>
-    <form action="/rejoindre-groupe" method="post">
-      <label for="group-name">Identifiant du groupe :</label>
-      <input type="text" id="group-name" name="group-name" required>
-      <button type="submit">Rejoindre</button>
-    </form>
-  </div>
   
   <div id="logout-button">
     <a href="/deconnexion">Déconnexion</a>
   </div>
+  
+
 </body>
 </html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.1/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+    
+    <script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'timeGridWeek', // Affiche une vue hebdomadaire
+          height: 'auto', // Hauteur automatique pour s'adapter au contenu
+          aspectRatio: 1.5, // Ratio d'aspect pour réduire la taille du calendrier
+          eventDisplay: 'block', // Affiche chaque événement comme un bloc
+          eventBackgroundColor: '#007bff', // Couleur de fond des événements
+          eventBorderColor: '#007bff', // Couleur de bordure des événements
+          eventTextColor: '#fff', // Couleur du texte des événements
+          eventTimeFormat: { // Format de l'heure des événements
+            hour: 'numeric',
+            minute: '2-digit',
+            meridiem: false,
+            hour12: false
+          },
+          events: {{ events | safe }} // Utilisez Jinja2 pour passer les événements JSON à FullCalendar
+        });
+        calendar.render();
+      });
+
+    </script>
+    <style>
+      /* Réduire la taille du calendrier */
+      #calendar {
+        max-width: 100%; /* Définissez la largeur maximale sur 100% */
+        margin: 0 auto; /* Centrez le calendrier horizontalement */
+      }
+    </style>
+  </head>
+  <body>
+    <div id='calendar'></div>
+    <div id="retour">
+      <a href="/groupe-details?id={{ group_id }}">Retour a la page du groupe</a>
+    </div>
+  </body>
+</html>

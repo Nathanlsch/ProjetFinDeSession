@@ -1,0 +1,101 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  #group-details {
+    width: 50%;
+    margin: 0 auto;
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    margin-top: 50px;
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center; /* Align items vertically */
+    align-items: center; /* Center items horizontally */
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 10px; /* Réduire la marge en bas */
+    font-size: 24px; /* Réduire la taille de la police */
+  }
+  
+  h3 {
+    text-align: center;
+    margin-bottom: 10px; /* Réduire la marge en bas */
+    font-size: 16px; /* Réduire la taille de la police */
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; /* Ensure the container takes full width */
+  }
+  
+  a {
+    display: block;
+    width: fit-content;
+    margin: 10px auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  a:hover {
+    background-color: #0056b3;
+  }
+  
+  #delete-button a {
+    background-color: #dc3545;
+  }
+  
+  #delete-button a:hover {
+    background-color: #bd2130;
+  }
+  
+  /* Style pour le formulaire de saisie des créneaux */
+  form {
+    max-width: 400px;
+    margin-top: 30px;
+    text-align: center;
+  }
+  
+  label {
+    display: inline-block; /* Changez la display en inline-block */
+    width: 120px; /* Ajoutez une largeur fixe pour les étiquettes */
+    text-align: right; /* Alignez le texte à droite pour les étiquettes */
+    margin-right: 10px; /* Ajoutez une marge à droite pour séparer les étiquettes des champs */
+    margin-bottom: 5px;
+  }
+  
+  input[type="text"] {
+    width: 200px; /* Réduisez la largeur des champs de saisie */
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  input[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Ajoutez plus d'espace entre les boutons */
+  #delete-button {
+    margin-top: 20px;
+  }
+  

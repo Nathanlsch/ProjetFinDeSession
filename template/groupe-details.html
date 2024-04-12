@@ -2,79 +2,63 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css">
+
+  <link rel="stylesheet" type="text/css" href="../static/style_groupe.css">
+
+
   <title>Détails du Groupe</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    #group-details {
-      width: 50%;
-      margin: 0 auto;
-      padding: 20px;
-      border: 2px solid #ccc;
-      border-radius: 10px;
-      margin-top: 50px;
-      display: flex; /* Use flexbox */
-      flex-direction: column; /* Stack items vertically */
-      justify-content: center; /* Align items vertically */
-      align-items: center; /* Center items horizontally */
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .button-container {
-      display: flex;
-      justify-content: space-between;
-      width: 100%; /* Ensure the container takes full width */
-    }
-
-    a {
-      display: block;
-      width: fit-content;
-      margin: 10px auto;
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-
-    a:hover {
-      background-color: #0056b3;
-    }
-
-    #delete-button a {
-      background-color: #dc3545;
-    }
-
-    #delete-button a:hover {
-      background-color: #bd2130;
-    }
-
-  </style>
+   
 </head>
 <body>
+  
   <div id="group-details">
     <h1>Détails du Groupe : {{ group_name }}</h1>
     <h3>Identifiant du groupe: {{ group_id }}</h3>
     <h3>Participants du groupe: {{ user_list }}</h3>
-    
+
+    <div id = calendar-button>
+      <a href="/calendrier-groupe?id={{ group_id }}">Voir le calendrier du groupe</a>
+    </div>
+
+    <!-- Formulaire de saisie des créneaux -->
+      <form id="creneau-form" action="/sauvegarder-creneau" method="post">
+        <h2>Ajouter un Créneau</h2>
+        <label for="date">Date :</label>
+        <input type="text" id="date" name="date" required>
+        <label for="heure-debut">Heure de début :</label>
+        <input type="text" id="heure-debut" name="heure-debut" required>
+        <label for="heure-fin">Heure de fin :</label>
+        <input type="text" id="heure-fin" name="heure-fin" required>
+        <input type="submit" value="Ajouter Créneau">
+      </form>
+
     
     {% if test_admin == 1 %}
-
-    <div id = delete-button> <a href="/acceuil">Supprimer le groupe</a> </div>    
+      <div id = delete-button>
+        <a href="/supprime-groupe?id={{ group_id }}">Supprimer le groupe</a>
+      </div>  
     {% endif %}
 
     <div id = accueil-button> <a href="/acceuil">Retour à la page d'accueil</a></div>
     
-<!-- Ajouter bouton qui permet de quitter le groupe, Ajouter affichage des utilisateurs du groupe, Ajouter le code du groupe pour inviter des utilisateurs -->
 
-  </div>
+  <!-- Script JavaScript pour activer le datepicker et les time pickers -->
+  <script>
+    // Activer le datepicker pour le champ de saisie de la date
+    $(function() {
+      $("#date").datepicker({ dateFormat: "yy-mm-dd" });
+    });
+
+    // Activer les time pickers pour les champs de saisie des heures de début et de fin
+    $(function() {
+      $("#heure-debut, #heure-fin").timepicker({ timeFormat: 'H:i', dropdown: false });
+    });
+  </script>
 </body>
 </html>

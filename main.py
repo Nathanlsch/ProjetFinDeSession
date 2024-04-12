@@ -2,11 +2,21 @@ from flask import Flask, render_template, request, redirect, session
 import facebook
 import sys
 import os
+import json
 
 # Ajoutez le chemin du dossier ServicePython au chemin de recherche Python
 sys.path.append(os.path.join(os.path.dirname(__file__), 'ServicePython'))
 
 import ServiceBdd
+
+events = [
+    {"title": "Réunion", "start": "2024-04-12T10:00:00", "end": "2024-04-12T11:30:00"},
+    {"title": "Cours de mathématiques", "start": "2024-04-13T14:00:00", "end": "2024-04-13T16:00:00"},
+    {"title": "Cours de mathématiques", "start": "2024-04-14T14:00:00", "end": "2024-04-13T16:00:00"},
+    {"title": "Cours de mathématiques", "start": "2024-04-15T14:00:00", "end": "2024-04-13T16:00:00"},
+    {"title": "Cours de mathématiques", "start": "2024-04-16T14:00:00", "end": "2024-04-13T16:00:00"}
+    # Ajoutez d'autres événements au besoin
+]
 
 
 # Facebook app credentials
@@ -79,6 +89,24 @@ def groupe_details():
     name = ServiceBdd.nomDuGroupeParId(group_id)
     return render_template("groupe-details.html", group_name=name, group_id=group_id, user_list=liste_user, test_admin = admin)
 
+@app.route('/rejoindre-groupe', methods=['POST'])
+def rejoindre_groupe():
+    if request.method == 'POST':
+        group_id = request.form['group-name']
+        ServiceBdd.ajoutUtilisateurGroupe(group_id,session['user_id'])
+    return redirect('/acceuil')
+
+@app.route('/supprime-groupe')
+def supprimer_groupe():
+    group_id = request.args.get('id')
+    ServiceBdd.supprimeGroupe(group_id)
+    return redirect('/acceuil')
+
+@app.route('/calendrier-groupe')
+def calendrier_groupe():
+    group_id = request.args.get('id')
+    return render_template('emploi_du_temps.html', events=json.dumps(events), group_id=group_id)
 
 if __name__ == '__main__':
     app.run(debug=True)
+

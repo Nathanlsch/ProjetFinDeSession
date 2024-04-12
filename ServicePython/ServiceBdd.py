@@ -105,20 +105,20 @@ def nouveauGroupe(group_name, user_id):
     print(f"Groupe '{group_name}' ajouté avec succès.")
 
 def ajoutUtilisateurGroupe(group_id, user_id):
-    group_ref = db.collection("groupes").where("name", "==", group_name).limit(1).get()
-    if group_ref:
-        for group_doc in group_ref:
-            group_data = group_doc.to_dict()
-            users = group_data.get("users", [])
-            if user_id not in users:
-                users.append(user_id)
-                group_doc.reference.update({"users": users})
-                ajoutGroupeUtilisateur(user_id,group_name)
-                print(f"Utilisateur '{user_id}' ajouté au groupe '{group_name}' avec succès.")
-            else:
-                print(f"L'utilisateur '{user_id}' est déjà dans le groupe '{group_name}'.")
+    group_ref = db.collection("groupes").document(group_id)
+    group_doc = group_ref.get()
+    if group_doc.exists:
+        group_data = group_doc.to_dict()
+        users = group_data.get("users", [])
+        if user_id not in users:
+            users.append(user_id)
+            group_doc.reference.update({"users": users})
+            ajoutGroupeUtilisateur(user_id,group_name)
+            print(f"Utilisateur '{user_id}' ajouté au groupe '{group_id}' avec succès.")
+        else:
+            print(f"L'utilisateur '{user_id}' est déjà dans le groupe '{group_id}'.")
     else:
-        print(f"Le groupe '{group_name}' n'existe pas.")
+        print(f"Le groupe '{group_id}' n'existe pas.")
 
 
 def groupesUtilisateurParIdUtilisateur(user_id):
@@ -184,14 +184,20 @@ def nomDuGroupeParId(group_id):
         print(f"Group '{group_id}' does not exist.")
         return None
 
-
-
-
-
-
-'''
-# Exemple d'utilisation
-utilisateur_id = "ID_de_l'utilisateur"
-groupes_utilisateur = groupesUtilisateur(utilisateur_id)
-print(f"Groupes de l'utilisateur '{utilisateur_id}': {groupes_utilisateur}")
-'''
+def supprimeGroupe(group_id):
+    # Supprimer le groupe de la collection "groupes"
+    group_ref = db.collection("groupes").document(group_id)
+    group_doc = group_ref.get()
+    if group_doc.exists:
+        group_data = group_doc.to_dict()
+        
+        # Supprimer le groupe de chaque utilisateur qui y appartient
+        users = group_data.get("users", [])
+        for user_id in users:
+            supprimeGroupeUtilisateur(user_id, group_id)
+        
+        # Supprimer le groupe de la collection "groupes"
+        group_ref.delete()
+        print(f"Groupe '{group_id}' supprimé avec succès.")
+    else:
+        print(f"Groupe '{group_id}' n'existe pas.")
