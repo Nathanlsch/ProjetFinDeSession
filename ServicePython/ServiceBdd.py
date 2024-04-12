@@ -76,18 +76,6 @@ def supprimeGroupeUtilisateur(user_id, group_name):
     else:
         print(f"User '{user_id}' does not exist.")
 
-# Renvoi tout les groupes d'un utilisateur 
-def groupesUtilisateur(user_id):
-    user_ref = db.collection("users").document(user_id)
-    user_doc = user_ref.get()
-    if user_doc.exists:
-        user_data = user_doc.to_dict()
-        groups = user_data.get("groupes", [])
-        return groups
-    else:
-        print(f"User '{user_id}' does not exist.")
-        return []
-
 # Fonction pour creer un nouveau groupe et ajoute le groupe au créataur 
 def nouveauGroupe(group_name, user_id):
     group_data = {
@@ -252,5 +240,35 @@ def liste_evenements_groupe(group_id):
     else:
         print("Le groupe", group_id, "n'existe pas dans la base de données.")
         return []
+
+def user_existe(document_id):
+    # Référence du document dans la collection
+    doc_ref = db.collection("users").document(document_id)
+    
+    # Vérifier si le document existe
+    doc_exists = doc_ref.get().exists
+    
+    return doc_exists
+
+def obtenir_nom_utilisateur_par_id_utilisateur(user_id):
+    # Référence du document utilisateur dans la collection "users"
+    user_ref = db.collection("users").document(user_id)
+    
+    # Obtenir le document de l'utilisateur
+    user_doc = user_ref.get()
+    
+    # Vérifier si le document de l'utilisateur existe
+    if user_doc.exists:
+        # Obtenir les données de l'utilisateur sous forme de dictionnaire
+        user_data = user_doc.to_dict()
+        
+        # Extraire le nom de l'utilisateur à partir des données
+        nom_utilisateur = user_data.get("name", "Nom inconnu")
+        
+        return nom_utilisateur
+    else:
+        # Si l'utilisateur n'existe pas, retourner une valeur par défaut
+        return "Utilisateur non trouvé"
+
 
 

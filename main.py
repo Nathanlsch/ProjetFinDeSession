@@ -3,6 +3,10 @@ import facebook
 import sys
 import os
 import json
+from flask_cors import CORS
+from flask import jsonify
+
+
 
 # Ajoutez le chemin du dossier ServicePython au chemin de recherche Python
 sys.path.append(os.path.join(os.path.dirname(__file__), 'ServicePython'))
@@ -27,6 +31,8 @@ redirect_uri = 'http://localhost:5000/acceuil'  # Update with your own redirect 
 # Initialisation de l'application Flask
 app = Flask(__name__, template_folder='template', static_folder='static')
 
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 # Clé secrète pour signer la session
 app.secret_key = 'votre_cle_secrete'
 
@@ -39,6 +45,18 @@ def index():
 def login():
     auth_url = facebook.GraphAPI().get_auth_url(app_id, redirect_uri)
     return redirect(auth_url)
+
+@app.route('/login-app', methods=['POST'])
+def login_app():
+    userid = request.json.get('userId')
+    reponse = ServiceBdd.user_existe(userid)
+    if (reponse): 
+        nom = ServiceBdd.obtenir_nom_utilisateur_par_id_utilisateur(userid)
+        liste_groupe = ServiceBdd.groupesUtilisateurParIdUtilisateur(userid)
+        print(liste_groupe)
+        return jsonify({'message': 'Authentification réussie', "id" : userid, "nom": nom, "listeGroupe" : liste_groupe}), 200
+    else :
+        return jsonify({'message': 'Authentification échoué'}), 200
 
 
 @app.route('/acceuil')
@@ -124,7 +142,7 @@ def sauvegarder_creneau():
     return 'Créneau ajouté avec succès !'
 
 
-
+'''
 if __name__ == '__main__':
     app.run(debug=True)
-
+'''
