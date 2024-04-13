@@ -41,7 +41,11 @@
   <body>
     <div id='calendar'></div>
     <div id="retour">
-      <a href="/groupe-details?id={{ group_id }}">Retour a la page du groupe</a>
+      {% if group_id == "null" %}
+        <a href="/acceuil">Retour a la page d'acceuil</a>
+      {% else %}
+        <a href="/groupe-details?id={{ group_id }}">Retour a la page du groupe</a>
+      {% endif %}
     </div>
   </body>
 </html>

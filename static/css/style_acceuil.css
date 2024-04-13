@@ -11,7 +11,8 @@ body {
   
   #create-group-form,
   #join-group-form,
-  #user-groups{
+  #user-groups,
+  #creneau-form{
     width: 50%;
     margin: 0 auto;
     padding: 20px;
@@ -26,13 +27,15 @@ body {
   }
   
   #create-group-form form label,
-  #join-group-form form label {
+  #join-group-form form label,
+  #creneau-form label {
     display: block;
     margin-bottom: 10px;
   }
   
   #create-group-form form input[type="text"],
-  #join-group-form form input[type="text"] {
+  #join-group-form form input[type="text"],
+  #creneau-form input[type="text"]{
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
@@ -41,7 +44,8 @@ body {
   }
   
   #create-group-form form button,
-  #join-group-form form button {
+  #join-group-form form button,
+  #creneau-form button {
     padding: 10px 20px;
     background-color: #007bff;
     color: #fff;
@@ -51,7 +55,8 @@ body {
   }
   
   #create-group-form form button:hover,
-  #join-group-form form button:hover {
+  #join-group-form form button:hover,
+  #creneau-form button:hover{
     background-color: #0056b3;
   }
   

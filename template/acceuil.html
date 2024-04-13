@@ -4,6 +4,17 @@
   <meta charset="UTF-8">
   <title>Page de bienvenue</title>
   <link rel="stylesheet" type="text/css" href="../static/css/style_acceuil.css">
+
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css">
+
+
+
+
+
 </head>
 
 
@@ -39,9 +50,64 @@
     {% endfor %}
   </div>
   
+  <!-- Formulaire de saisie des créneaux -->
+  <form id="creneau-form" action="/sauvegarder-creneau-user" method="post" onsubmit="submitForm(event)">
+    <h2>Ajouter un Créneau</h2>
+    <label for="titre">Titre :</label>
+    <input type="text" id="titre" name="titre" required>
+    <label for="date">Date :</label>
+    <input type="text" id="date" name="date" required>
+    <label for="heure-debut">Heure de début :</label>
+    <input type="text" id="heure-debut" name="heure-debut" required>
+    <label for="heure-fin">Heure de fin :</label>
+    <input type="text" id="heure-fin" name="heure-fin" required>
+    <button type="submit">Ajouter Créneau</button>
+  </form>
+
+  <div id="calendrier">
+    <a href="/calendrier-user">Voir mon calendrier</a>
+  </div>
+  
   <div id="logout-button">
     <a href="/deconnexion">Déconnexion</a>
   </div>
+
+
+   <!-- Script JavaScript pour activer le datepicker et les time pickers -->
+   <script>
+    // Activer le datepicker pour le champ de saisie de la date
+    $(function() {
+      $("#date").datepicker({ dateFormat: "yy-mm-dd" });
+    });
+
+    // Activer les time pickers pour les champs de saisie des heures de début et de fin
+    $(function() {
+      $("#heure-debut, #heure-fin").timepicker({ timeFormat: 'H:i', dropdown: false });
+    });
+
+    function submitForm(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du formulaire
+
+        // Récupérer les données du formulaire
+        var formData = $('#creneau-form').serialize();
+
+        // Envoyer les données du formulaire au serveur de manière asynchrone
+        $.ajax({
+            type: 'POST',
+            url: '/sauvegarder-creneau-user',
+            data: formData,
+            success: function(response) {
+                // Faire quelque chose en cas de succès, par exemple afficher un message de confirmation
+                alert('Créneau ajouté avec succès!');
+            },
+            error: function(xhr, status, error) {
+                // Gérer les erreurs en cas d'échec de la requête
+                console.error(error);
+            }
+        });
+    }
+
+  </script>
   
 
 </body>

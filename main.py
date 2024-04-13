@@ -141,6 +141,30 @@ def sauvegarder_creneau():
         ServiceBdd.ajouter_evenement_groupe(json, group_id)
     return 'Créneau ajouté avec succès !'
 
+@app.route('/sauvegarder-creneau-user', methods=['POST'])
+def sauvegarder_creneau_user():
+    if request.method == 'POST':
+        # Récupérer les données du formulaire
+        titre = request.form.get('titre')
+        date = request.form.get('date')
+        heure_debut = request.form.get('heure-debut')
+        heure_fin = request.form.get('heure-fin')
+        user_id = session['user_id']
+
+        json = creer_evenement_json(date, heure_debut,heure_fin,titre)
+        ServiceBdd.ajouter_evenement_user(json, user_id)
+    return 'Créneau ajouté avec succès !'
+
+@app.route('/calendrier-user')
+def calendrier_user():
+    liste_groupe = ServiceBdd.groupesUtilisateurParIdUtilisateur(session['user_id'])
+    liste_ids = [element['id'] for element in liste_groupe]
+    events = ServiceBdd.liste_evenements_user(session['user_id'])
+    for group_id in liste_ids :
+        events_groupe = ServiceBdd.liste_evenements_groupe(group_id)
+        events.extend(events_groupe)
+    print(events)
+    return render_template('emploi_du_temps.html', events=json.dumps(events), group_id="null")
 
 '''
 if __name__ == '__main__':

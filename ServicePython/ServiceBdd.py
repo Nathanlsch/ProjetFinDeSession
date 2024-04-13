@@ -32,7 +32,8 @@ def supprimeUtilisateur(user_id):
 def CreerDonneeUtilisateur(name):
     user_data = {
         "name": name,
-        "groupes": []
+        "groupes": [],
+        "events" : []
     }
     return user_data
 
@@ -220,6 +221,34 @@ def ajouter_evenement_groupe(event_json, group_id):
     else:
         print("Le groupe", group_id, "n'existe pas dans la base de données.")
 
+def ajouter_evenement_user(event_json, user_id):
+    # Convertir l'objet JSON en dictionnaire Python
+    event_data = json.loads(event_json)
+        
+    # Référence de l'user dans la base de données
+    user_ref = db.collection("users").document(user_id)
+        
+    # Obtenir le document de l'user
+    user_doc = user_ref.get()
+        
+    # Vérifier si l'user existe dans la base de données
+    if user_doc.exists:
+        # Obtenir les données du groupe
+        user_data = user_doc.to_dict()
+            
+        # Obtenir la liste des événements actuels du groupe
+        events = user_data.get("events", [])
+            
+        # Ajouter le nouvel événement à la liste des événements
+        events.append(event_data)
+            
+        # Mettre à jour les données du groupe avec la nouvelle liste d'événements
+        user_ref.update({"events": events})
+            
+        print("Événement ajouté avec succès au groupe", user_id)
+    else:
+        print("Le groupe", user_id, "n'existe pas dans la base de données.")
+
 def liste_evenements_groupe(group_id):
     # Référence du groupe dans la base de données
     group_ref = db.collection("groupes").document(group_id)
@@ -239,6 +268,27 @@ def liste_evenements_groupe(group_id):
         return events
     else:
         print("Le groupe", group_id, "n'existe pas dans la base de données.")
+        return []
+
+def liste_evenements_user(user_id):
+    # Référence du groupe dans la base de données
+    user_ref = db.collection("users").document(user_id)
+    
+    # Obtenir le document du groupe
+    user_doc = user_ref.get()
+    
+    # Vérifier si le groupe existe dans la base de données
+    if user_doc.exists:
+        # Obtenir les données du groupe
+        user_data = user_doc.to_dict()
+        
+        # Obtenir la liste des événements du groupe
+        events = user_data.get("events", [])
+        
+        # Retourner la liste des événements (convertis en JSON)
+        return events
+    else:
+        print("Le groupe", user_id, "n'existe pas dans la base de données.")
         return []
 
 def user_existe(document_id):
