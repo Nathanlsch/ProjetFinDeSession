@@ -6,8 +6,6 @@ import json
 from flask_cors import CORS
 from flask import jsonify
 
-
-
 # Ajoutez le chemin du dossier ServicePython au chemin de recherche Python
 sys.path.append(os.path.join(os.path.dirname(__file__), 'ServicePython'))
 
@@ -21,7 +19,6 @@ def creer_evenement_json(date, heure_debut, heure_fin, titre):
         "end": f"{date}T{heure_fin}:00"
     }
     return json.dumps(evenement)
-
 
 # Facebook app credentials
 app_id = '1721756045020268'
@@ -48,16 +45,17 @@ def login():
 
 @app.route('/login-app', methods=['POST'])
 def login_app():
+    session['mobile'] = 1
     userid = request.json.get('userId')
     reponse = ServiceBdd.user_existe(userid)
     if (reponse): 
         nom = ServiceBdd.obtenir_nom_utilisateur_par_id_utilisateur(userid)
         liste_groupe = ServiceBdd.groupesUtilisateurParIdUtilisateur(userid)
-        print(liste_groupe)
+        session['user_id'] = userid
+        session['user_name'] = nom
         return jsonify({'message': 'Authentification réussie', "id" : userid, "nom": nom, "listeGroupe" : liste_groupe}), 200
     else :
         return jsonify({'message': 'Authentification échoué'}), 200
-
 
 @app.route('/acceuil')
 def acceuil():
@@ -80,6 +78,7 @@ def acceuil():
         # Stocke les informations de l'utilisateur dans la session
         session['user_id'] = id
         session['user_name'] = name
+        session['mobile'] = 0
 
         liste_groupe = ServiceBdd.groupesUtilisateurParIdUtilisateur(id)
           
@@ -90,22 +89,38 @@ def deconnexion():
     # Efface les données de session de l'utilisateur
     session.pop('user_id', None)
     session.pop('user_name', None)
+    session.clear()
     return redirect('/')
 
 @app.route('/creer-groupe', methods=['POST'])
 def nouveauGroupe():
     if request.method == 'POST':
-        group_name = request.form['group-name']
-        ServiceBdd.nouveauGroupe(group_name, session['user_id'])
-    return redirect('/acceuil')
+        if(session['mobile']):
+            group_name = request.json.get('group_name')
+            print(group_name)
+            ServiceBdd.nouveauGroupe(group_name, session['user_id'])
+            liste_groupe = ServiceBdd.groupesUtilisateurParIdUtilisateur(session['user_id'])
+            return jsonify({'message': 'Groupe ajouté', "listeGroupe" : liste_groupe}), 200
+        else : 
+            group_name = request.form['group-name']
+            ServiceBdd.nouveauGroupe(group_name, session['user_id'])
+            return redirect('/acceuil')
 
 @app.route('/groupe-details')
 def groupe_details():
-    group_id = request.args.get('id')
+    if(session['mobile']):
+        group_id = request.json.get('group_id')
+    else : 
+        group_id = request.args.get('id')
+
     liste_user = ServiceBdd.utilisateursParIdGroupe(group_id)
     admin = ServiceBdd.estAdminDuGroupe(session['user_id'], group_id)
     name = ServiceBdd.nomDuGroupeParId(group_id)
-    return render_template("groupe-details.html", group_name=name, group_id=group_id, user_list=liste_user, test_admin = admin)
+    
+    if(session['mobile']):
+        return jsonify({'message': 'Info Groupe', 'group_name' : name, 'user_list': liste_user, 'test_admin' : admin}), 200
+    else : 
+        return render_template("groupe-details.html", group_name=name, group_id=group_id, user_list=liste_user, test_admin = admin)
 
 @app.route('/rejoindre-groupe', methods=['POST'])
 def rejoindre_groupe():

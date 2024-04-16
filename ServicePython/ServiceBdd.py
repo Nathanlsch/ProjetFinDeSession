@@ -10,14 +10,14 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 # Ajout utilisateur
-def ajoutUtilisateur(document_id, document_data):
-    user_ref = db.collection("users").document(document_id)
+def ajoutUtilisateur(user_id, user_data):
+    user_ref = db.collection("users").document(user_id)
     user_doc = user_ref.get()
     if user_doc.exists:
-        print(f"User '{document_id}' already exists.")
+        print(f"User '{user_id}' already exists.")
     else:
-        user_ref.set(document_data)
-        print(f"User '{document_id}' added successfully.")
+        user_ref.set(user_data)
+        print(f"User '{user_id}' added successfully.")
 
 # Function to delete a user
 def supprimeUtilisateur(user_id):
@@ -57,23 +57,23 @@ def ajoutGroupeUtilisateur(user_id, group_id):
             user_ref.update({"groupes": groups})
             print(f"Group '{group_id}' added to user '{user_id}' successfully.")
         else:
-            print(f"User '{user_id}' already belongs to group '{group_name}'.")
+            print(f"User '{user_id}' already belongs to group '{group_id}'.")
     else:
         print(f"User '{user_id}' does not exist.")
 
 # Supprime un groupe de la liste d'un utilisateur 
-def supprimeGroupeUtilisateur(user_id, group_name):
+def supprimeGroupeUtilisateur(user_id, group_id):
     user_ref = db.collection("users").document(user_id)
     user_doc = user_ref.get()
     if user_doc.exists:
         user_data = user_doc.to_dict()
         groups = user_data.get("groupes", [])
-        if group_name in groups:
-            groups.remove(group_name)
+        if group_id in groups:
+            groups.remove(group_id)
             user_ref.update({"groupes": groups})
-            print(f"Group '{group_name}' removed from user '{user_id}' successfully.")
+            print(f"Group '{group_id}' removed from user '{user_id}' successfully.")
         else:
-            print(f"User '{user_id}' does not belong to group '{group_name}'.")
+            print(f"User '{user_id}' does not belong to group '{group_id}'.")
     else:
         print(f"User '{user_id}' does not exist.")
 
@@ -104,7 +104,7 @@ def ajoutUtilisateurGroupe(group_id, user_id):
         if user_id not in users:
             users.append(user_id)
             group_doc.reference.update({"users": users})
-            ajoutGroupeUtilisateur(user_id,group_name)
+            ajoutGroupeUtilisateur(user_id, group_id)
             print(f"Utilisateur '{user_id}' ajouté au groupe '{group_id}' avec succès.")
         else:
             print(f"L'utilisateur '{user_id}' est déjà dans le groupe '{group_id}'.")
