@@ -5,7 +5,13 @@ from ServiceBdd import *
 app = Flask(__name__)
 
 
-#Ajoute un utilisateur à la base de données (user_id et user_data)
+#--------------------Serveur Flask permettant de manipuler la base de donnée via une API--------------
+
+'''
+Ajoute un utilisateur à la base de données 
+Méthode POST : Argument : user_id et user_data
+Retourne un json avec un message de succès ou d'échec
+'''
 @app.route('/ajout-utilisateur', methods=['POST'])
 def ajout_utilisateur():
     user_id = request.json.get('user_id')
@@ -28,7 +34,12 @@ def supprime_utilisateur():
         return jsonify({"message": "User does not exist"}), 201
 '''
 
-#Création d'un nouveau groupe et ajout du créateur  (group_name, user_id)
+
+'''
+Création d'un nouveau groupe et ajout du créateur
+Méthode POST : Argument : user_id et group_name
+Retourne un json avec un message de succès ou d'échec
+'''
 @app.route('/nouveau-groupe', methods=['POST'])
 def nouveau_groupe():
     group_name = request.json.get('group_name')
@@ -51,7 +62,11 @@ def user_exist():
         return jsonify({"message": "User don't exist"})
 '''
 
-#Récupérer le nom d'un utilisateur avec son id (user_id)
+'''
+Renvoie le nom d'un utilisateur a partir de son id
+Méthode POST : Argument : user_id
+Retourne un json avec un message contenant le nom ou un message d'échec
+'''
 @app.route('/user-name', methods=['POST'])
 def user_name():
     user_id = request.json.get('user_id')
@@ -62,15 +77,22 @@ def user_name():
         return jsonify({"message": reponse})
 
 
-#Récupère la liste des groupes d'un user avec l'id et le nom (user_id)
+'''
+Renvoie la liste des groupes d'un user
+Méthode POST : Argument : user_id
+Retourne un json avec la liste, ou une liste vide en cas d'échec
+'''
 @app.route('/user-group', methods=['POST'])
 def user_groupe():
     user_id = request.json.get('user_id')
     liste = groupesUtilisateurParIdUtilisateur(user_id)
     return jsonify({"liste": liste})
 
-
-#Renvoie la liste des utilisateur d'un groupe (group_id)
+'''
+Renvoie la liste des groupes d'un user (id + nom)
+Méthode POST : Argument : group_id
+Retourne un json avec la liste, ou une liste vide en cas d'échec
+'''
 @app.route('/liste-user-group', methods=['POST'])
 def liste_user_groupe():
     group_id = request.json.get('group_id')
@@ -105,7 +127,11 @@ def name_group():
         return jsonify({"name": "Group does not exist"})
 '''
 
-#Ajoute un user a un groupe et ajoute le groupe dans la liste de l'user (user_id, group_id)
+'''
+Ajoute un user a un groupe et ajoute le groupe dans la liste de l'user
+Méthode POST : Argument : user_id et group_id
+Retourne un json avec un message d'information 
+'''
 @app.route('/ajout-user-group', methods=['POST'])
 def ajout_user_group():
     group_id = request.json.get('group_id')
@@ -118,8 +144,11 @@ def ajout_user_group():
     else :
         return jsonify({"message": "Id du groupe n'existe pas"})
 
-
-#Supprime un groupe en donnant l'id (group_id)
+'''
+Supprime un groupe et son appariton dans la liste des groupes des user
+Méthode POST : Argument : group_id
+Retourne un json avec un message d'information 
+'''
 @app.route('/delete-group', methods=['POST'])
 def delete_group():
     group_id = request.json.get('group_id')
@@ -129,19 +158,28 @@ def delete_group():
     else : 
         return jsonify({"message": "Le group n'existe pas"})
 
-
-#Renvoie le nom du groupe, la liste des users et si l'user est admin (user_id, group_id) 
+'''
+Renvoie le nom du groupe, la liste des users et si l'user est admin
+Méthode POST : Argument : user_id, group_id
+Retourne un json avec les données ou un json avec None en name si le groupe n'existe pas 
+'''
 @app.route('/info-group', methods=['POST'])
 def info_group():
     group_id = request.json.get('group_id')
     user_id = request.json.get('user_id')
     nom_groupe = nomDuGroupeParId(group_id)
-    admin = estAdminDuGroupe(user_id, group_id)
-    liste_user = utilisateursParIdGroupe(group_id)
-    print({"name": nom_groupe, "liste": liste_user, "admin": admin})
-    return jsonify({"name": nom_groupe, "liste": liste_user, "admin": admin})
+    if (nom_groupe != None):
+        admin = estAdminDuGroupe(user_id, group_id)
+        liste_user = utilisateursParIdGroupe(group_id)
+        return jsonify({"name": nom_groupe, "liste": liste_user, "admin": admin})
+    else :
+        return jsonify({"name": None})
 
-
+'''
+Renvoie la liste de tout les events d'un groupe 
+Méthode POST : Argument : group_id
+Retourne un json avec la liste ou une liste vide si le groupe n'existe pas 
+'''
 #Renvoie tout les events d'un groupe (group_id)
 @app.route('/liste-event-group', methods=['POST'])
 def liste_event_group():
@@ -149,7 +187,11 @@ def liste_event_group():
     liste_event = liste_evenements_groupe(group_id)
     return jsonify({"liste": liste_event})
 
-
+'''
+Renvoie la liste de tout les events d'un user 
+Méthode POST : Argument : user_id
+Retourne un json avec la liste ou une liste vide si l'user n'existe pas 
+'''
 #Renvoie tout les events d'un user (user_id)
 @app.route('/liste-event-user', methods=['POST'])
 def liste_event_user():
@@ -157,20 +199,37 @@ def liste_event_user():
     liste_event = liste_full_events(user_id)
     return jsonify({"liste": liste_event})
 
-
+'''
+Ajoute un event a un groupe
+Méthode POST : Argument : group_id et json 
+Retourne un json avec un message de succès ou d'échec
+'''
 #Ajoute un event a un groupe (group_id, json)
 @app.route('/add-event-group', methods=['POST'])
 def add_event_group():
     group_id = request.json.get('group_id')
     event = request.json.get('json')
-    ajouter_evenement_groupe(event, group_id)
-    return jsonify({"message": "Event ajouté"})
+    etat = ajouter_evenement_groupe(event, group_id)
+    if (etat == 0):
+        return jsonify({"message": "Event ajouté"})
+    else :
+        return jsonify({"message": "Impossible d'ajouter l'event à ce groupe"})
 
+'''
+Ajoute un event a un user
+Méthode POST : Argument : user_id et json 
+Retourne un json avec un message de succès ou d'échec
+'''
 #Ajoute un event a un user (user_id, json)
 @app.route('/add-event-user', methods=['POST'])
 def add_event_user():
     user_id = request.json.get('user_id')
     event = request.json.get('json')
-    ajouter_evenement_user(event, user_id)
-    return jsonify({"message": "Event ajouté"})
+    etat = ajouter_evenement_user(event, user_id)
+    if (etat == 0):
+        return jsonify({"message": "Event ajouté"})
+    else :
+        return jsonify({"message": "Impossible d'ajouter l'event à ce groupe"})
 
+if __name__ == '__main__':
+    app.run(port=8000)

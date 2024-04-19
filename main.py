@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request, redirect, session, jsonify
+from flask_login import LoginManager, login_user, logout_user, login_required
 from flask_cors import CORS
 import facebook
 import json
 import requests
+import urllib
+
 
 def creer_evenement_json(date, heure_debut, heure_fin, titre):
     # Créer un objet JSON avec les clés "title", "start" et "end"
@@ -37,7 +40,6 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Clé secrète pour signer la session
 app.secret_key = 'votre_cle_secrete'
-
 
 #Route pour afficher la page de connexion 
 @app.route('/')
@@ -99,6 +101,7 @@ def acceuil():
         #Si oui on récupère les informations de l'utilisateur 
         id = session['user_id']
         name = session['user_name']
+        graph = session['token'] 
         
         #Récupération de la liste des groupes de l'utilisateur
         reponse = requests.post(api_url + "/user-group", json={"user_id":id})
@@ -121,12 +124,14 @@ def acceuil():
         # Stocke les informations de l'utilisateur dans la session
         session['user_id'] = id
         session['user_name'] = name
+        print("ACCES  ",access_token)
+        session['token'] = access_token
         
         #Récupération de la liste des groupes de l'utilisateur
         reponse = requests.post(api_url + "/user-group", json={"user_id":id})
         json_data = reponse.json()
-        liste_groupe = reponse.get('liste')
-      
+        liste_groupe = json_data.get('liste')
+    
     return render_template("acceuil.html", nom=name, user_groups2=liste_groupe)
 
 
@@ -134,11 +139,12 @@ def acceuil():
 @app.route('/deconnexion')
 def deconnexion():
     # Efface les données de session de l'utilisateur
-    session.pop('user_id', None)
-    session.pop('user_name', None)
     session.clear()
     return redirect('/')
 
+    
+    
+    
 
 #Route pour créer un nouveau groupe 
 @app.route('/creer-groupe', methods=['POST'])
