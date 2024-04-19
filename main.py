@@ -139,12 +139,13 @@ def acceuil():
 @app.route('/deconnexion')
 def deconnexion():
     # Efface les données de session de l'utilisateur
+    temp = session['mobile']
     session.clear()
-    return redirect('/')
+    if (temp):
+        return jsonify({'message': 'Déconnexion'}), 200
+    else:
+        return redirect('/')
 
-    
-    
-    
 
 #Route pour créer un nouveau groupe 
 @app.route('/creer-groupe', methods=['POST'])
@@ -199,18 +200,38 @@ def groupe_details():
 def rejoindre_groupe():
     if request.method == 'POST':
         #Récupération de l'id du groupe
-        group_id = request.form['group-name']
+        if(session['mobile']):
+            group_id = request.json.get('group_id')
+        else :
+            group_id = request.form['group-name']
         requests.post(api_url + "/ajout-user-group", json={"user_id":session['user_id'], "group_id": group_id})
-    return redirect('/acceuil')
 
-
+        if(session['mobile']):
+            reponse = requests.post(api_url + "/user-group", json={"user_id":id})
+            json_data = reponse.json()
+            liste_groupe = json_data.get('liste') 
+            return jsonify({'liste': liste_groupe})
+        else :
+            return redirect('/acceuil')
+    
 #Supprime un groupe si l'utilisateur est l'admin
 @app.route('/supprime-groupe')
 def supprimer_groupe():
-    #Récupération de l'id du groupe 
-    group_id = request.args.get('id')
+    #Récupération de l'id du groupe
+    if(session['mobile']):
+        group_id = request.json.get('group_id')
+    else :
+        group_id = request.args.get('id')
+
     requests.post(api_url + "/delete-group", json={"group_id": group_id})
-    return redirect('/acceuil')
+
+    if(session['mobile']):
+        reponse = requests.post(api_url + "/user-group", json={"user_id":id})
+        json_data = reponse.json()
+        liste_groupe = json_data.get('liste') 
+        return jsonify({'liste': liste_groupe})
+    else :
+        return redirect('/acceuil')
 
 
 #Affiche le calendrier d'un groupe 
