@@ -50,7 +50,7 @@ def nouveau_groupe():
     else:
         return jsonify({"message": "User does not exist"})
 
-'''
+
 #Test de l'existence d'un utilisateur (user_id)
 @app.route('/user-exist', methods=['POST'])
 def user_exist():
@@ -60,7 +60,7 @@ def user_exist():
         return jsonify({"message": "User exist"})
     else:
         return jsonify({"message": "User don't exist"})
-'''
+
 
 '''
 Renvoie le nom d'un utilisateur a partir de son id

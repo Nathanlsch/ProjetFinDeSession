@@ -6,7 +6,6 @@ import json
 import requests
 import urllib
 
-
 def creer_evenement_json(date, heure_debut, heure_fin, titre):
     # Créer un objet JSON avec les clés "title", "start" et "end"
     evenement = {
@@ -38,6 +37,7 @@ app = Flask(__name__, template_folder='template', static_folder='static')
 #Ouverture des requetes a tout les domaines pour pouvoir echnager avec l'interface mobile 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+
 # Clé secrète pour signer la session
 app.secret_key = 'votre_cle_secrete'
 
@@ -57,23 +57,23 @@ def login():
 #Route pour gérer la connexion depuis un mobile 
 @app.route('/login-app', methods=['POST'])
 def login_app():
-    #Met la variable de session "mobile" a un pour enregistrer que la connexion viens d'un mobiel
-    session['mobile'] = 1
     #Récupère l'id de l'utilisateur 
     user_id = request.json.get('userId')
  
     #Intérroge la bdd pour savoir si l'user existe
     reponse = requests.post(api_url + "/user-exist", json={"user_id":user_id})
     json_data = reponse.json()
-    message = reponse.get('message')
+    message = json_data.get('message')
 
     #Si il existe 
     if (message == "User exist"): 
         
+        session['mobile'] = 1
+        print(session['mobile'])
         #Récuperer son nom dans la bdd
         reponse = requests.post(api_url + "/user-name", json={"user_id":user_id})
         json_data = reponse.json()
-        nom = reponse.get('message')
+        nom = json_data.get('message')
 
         #Récupérer la liste de ses groupes
         reponse = requests.post(api_url + "/user-group", json={"user_id":user_id})
@@ -85,7 +85,7 @@ def login_app():
         session['user_name'] = nom
 
         #Retourner les données pour l'interface mobile 
-        return jsonify({'message': 'Authentification réussie', "id" : userid, "nom": nom, "listeGroupe" : liste_groupe}), 200
+        return jsonify({'message': 'Authentification réussie', "id" : user_id, "nom": nom, "listeGroupe" : liste_groupe}), 200
     else :
         #Si l'identifiant n'existe pas 
         return jsonify({'message': 'Authentification échoué'}), 200
@@ -101,7 +101,6 @@ def acceuil():
         #Si oui on récupère les informations de l'utilisateur 
         id = session['user_id']
         name = session['user_name']
-        graph = session['token'] 
         
         #Récupération de la liste des groupes de l'utilisateur
         reponse = requests.post(api_url + "/user-group", json={"user_id":id})
@@ -124,8 +123,6 @@ def acceuil():
         # Stocke les informations de l'utilisateur dans la session
         session['user_id'] = id
         session['user_name'] = name
-        print("ACCES  ",access_token)
-        session['token'] = access_token
         
         #Récupération de la liste des groupes de l'utilisateur
         reponse = requests.post(api_url + "/user-group", json={"user_id":id})
@@ -139,7 +136,6 @@ def acceuil():
 @app.route('/deconnexion')
 def deconnexion():
     # Efface les données de session de l'utilisateur
-    temp = session['mobile']
     session.clear()
     if (temp):
         return jsonify({'message': 'Déconnexion'}), 200
@@ -164,9 +160,9 @@ def nouveauGroupe():
         #Renvoie les données au bon format 
         if(session['mobile']):
             #Récupération de la liste des groupes de l'utilisateur
-            reponse = requests.post(api_url + "/user-group", json={"user_id":id})
+            reponse = requests.post(api_url + "/user-group", json={"user_id":session['user_id']})
             json_data = reponse.json()
-            liste_groupe = reponse.get('liste')
+            liste_groupe = json_data.get('liste')
             return jsonify({'message': 'Groupe ajouté', "listeGroupe" : liste_groupe}), 200
         else : 
             return redirect('/acceuil')
