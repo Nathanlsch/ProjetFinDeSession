@@ -5,6 +5,7 @@ import os
 import json
 from flask_cors import CORS
 from flask import jsonify
+from validation import *
 
 # Ajoutez le chemin du dossier ServicePython au chemin de recherche Python
 sys.path.append(os.path.join(os.path.dirname(__file__), 'ServicePython'))
@@ -63,9 +64,9 @@ def acceuil():
         id = session['user_id']
         name = session['user_name']
         # Récupérer la liste des groupes de l'utilisateur
-
         liste_groupe = ServiceBdd.groupesUtilisateurParIdUtilisateur(id)
-
+        session['mobile'] = 0
+        
     else:
         code = request.args.get('code')
         access_token = facebook.GraphAPI().get_access_token_from_code(code, redirect_uri, app_id, app_secret)
@@ -151,10 +152,15 @@ def sauvegarder_creneau():
         heure_debut = request.form.get('heure-debut')
         heure_fin = request.form.get('heure-fin')
         group_id = request.form.get('group-id')
+        
+        validation_creneau, message_creneau = sauvegarder_creneau_variables_validation (titre, date, heure_debut, heure_fin, group_id)
 
-        json = creer_evenement_json(date, heure_debut,heure_fin,titre)
-        ServiceBdd.ajouter_evenement_groupe(json, group_id)
-    return 'Créneau ajouté avec succès !'
+        if  validation_creneau == True :
+            json = creer_evenement_json(date, heure_debut,heure_fin,titre)
+            ServiceBdd.ajouter_evenement_groupe(json, group_id)
+            return message_creneau
+        else :
+            return message_creneau
 
 @app.route('/sauvegarder-creneau-user', methods=['POST'])
 def sauvegarder_creneau_user():
@@ -166,9 +172,14 @@ def sauvegarder_creneau_user():
         heure_fin = request.form.get('heure-fin')
         user_id = session['user_id']
 
-        json = creer_evenement_json(date, heure_debut,heure_fin,titre)
-        ServiceBdd.ajouter_evenement_user(json, user_id)
-    return 'Créneau ajouté avec succès !'
+        validation_creneau, message_creneau = sauvegarder_creneau_variables_validation (titre, date, heure_debut, heure_fin, group_id)
+
+        if  validation_creneau :
+            json = creer_evenement_json(date, heure_debut,heure_fin,titre)
+            ServiceBdd.ajouter_evenement_groupe(json, group_id)
+            return message_creneau
+        else :
+            return message_creneau
 
 @app.route('/calendrier-user')
 def calendrier_user():
@@ -181,7 +192,7 @@ def calendrier_user():
     print(events)
     return render_template('emploi_du_temps.html', events=json.dumps(events), group_id="null")
 
-'''
+
 if __name__ == '__main__':
     app.run(debug=True)
-'''
+
