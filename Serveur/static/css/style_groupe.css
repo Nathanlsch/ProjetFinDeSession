@@ -1,0 +1,142 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px; /* Ajout d'une marge sur les bords */
+  background-color: rgb(33, 37, 41);
+  padding: 20px;
+  border: 15px solid rgb(51, 51, 51);
+  border-radius: 50px;
+}
+
+#details {
+  margin: 0 auto;
+  padding: 22px;
+  border: 8px solid rgb(51, 51, 51);
+  border-radius: 25px;
+  margin-bottom: 20px; /* Ajout d'une marge entre chaque div */
+  margin-top: 20px; /* Ajout d'une marge entre chaque div */
+  overflow: auto;
+  width: 850px;
+}
+
+#creneau-form {
+  margin: 0 auto;
+  padding: 22px;
+  border: 8px solid rgb(51, 51, 51);
+  border-radius: 25px;
+  margin-bottom: 20px; /* Ajout d'une marge entre chaque div */
+  margin-top: 10px; /* Ajout d'une marge entre chaque div */
+  overflow: auto;
+  max-height: 700px;
+}
+
+.custom-width-form {
+  width: 700px; /* Adjust the width as needed */
+  margin: 0 auto; /* Center the form horizontally */
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 10px; /* Réduire la marge en bas */
+  font-size: 24px; /* Réduire la taille de la police */
+}
+
+h3 {
+  text-align: center;
+  margin-bottom: 10px; /* Réduire la marge en bas */
+  font-size: 16px; /* Réduire la taille de la police */
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%; /* Ensure the container takes full width */
+}
+
+a {
+  display: block;
+  width: fit-content;
+  margin: 10px auto;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+a:hover {
+  background-color: #0056b3;
+}
+
+/* Style pour le formulaire de saisie des créneaux */
+form {
+  max-width: 632px;
+  margin-top: 30px;
+  text-align: left;
+}
+
+label {
+  display: inline-block; /* Changez la display en inline-block */
+  width: 582px; /* Ajoutez une largeur fixe pour les étiquettes */
+  text-align: right; /* Alignez le texte à droite pour les étiquettes */
+  margin-right: 10px; /* Ajoutez une marge à droite pour séparer les étiquettes des champs */
+  margin-bottom: 1px;
+}
+
+input[type="text"] {
+  width: 200px; /* Réduisez la largeur des champs de saisie */
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+input[type="submit"] {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Ajoutez plus d'espace entre les boutons */
+#delete-button {
+  margin-top: 20px;
+}
+
+.text-white {
+  color: #fff !important; /* Set text color to white */
+}
+
+.custom-label {
+  color: white;
+  font-size: 18px;
+  font-family: Arial, sans-serif;
+  text-align: left;
+}
+
+.min-height-300 {
+  min-height: 100px;
+}
+
+#creneau-form input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+#liveAlertBtn {
+  margin-left: 20px;
+  margin-bottom: 0.5rem;
+  max-height: 40.28px;
+}
+
+.fs-3 {
+  vertical-align: middle;
+}
