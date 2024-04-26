@@ -55,6 +55,14 @@ Si vous avez une autre adresse il faut changer le parametre "api_serveur" du fic
 
 A cette étape la vous pouver normalement utiliser le client web et toute les fonctionnalité du serveur.
 
+INFORMATION IMPORTANTE : Notre application Facebook permettant d’utiliser l’api Facebook login est en mode développement car notre serveur web n’est pas déployé réellement sur le web.  
+
+Cela a pour conséquence qu’il faut ajouter manuellement tous les comptes Facebook ayant le droit de se connecter à notre application. C’est pour cela que nous avons créé un faux compte pour pouvoir tester l’application  
+
+Mail : compteuserapp@gmail.com 
+
+Mdp : motdepasseuser 
+
 -----------------Mise en place de l'app mobile--------------------------------------------
 
 Version de Node.js utilisé : v20.11.1
