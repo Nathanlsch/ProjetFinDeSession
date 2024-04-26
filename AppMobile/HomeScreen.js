@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button, Dimensions, Alert, TextInput, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
 import EventCalendar from 'react-native-events-calendar';
-import { Clipboard, Platform } from 'react-native';
+import { Clipboard} from 'react-native';
 import API_URL from './config';
 
 const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setLoggedIn, setUsername}) => {
 
+  //Variable pour l'interface 
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [events, setEvents] = useState([]);
@@ -21,10 +22,12 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
   const [groupeAdd, setGroupAdd] = useState('');
   const [refreshing, setRefreshing] = useState(false); // Ajout de refreshing
 
+  //Pour gérer la dimension du calendrier 
   const { width, height } = Dimensions.get('window');
   const calendarMarginTop = 50; // Ajustez cette valeur selon vos besoins
   const calendarContainerHeight = height- 2*calendarMarginTop; // Ajustez cette valeur selon vos besoins
 
+  //Requete pour creer un groupe 
   const handleCreateGroup = () => {
 
     if (!newGroupName.trim()) {
@@ -59,6 +62,7 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
       });
   };
 
+  //Requete pour rejoindre un groupe 
   const handleJoinGroup = () => {
 
     if (!groupeAdd.trim()) {
@@ -93,10 +97,12 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
       });
   };
 
+  //Fonction pour afficher ou cacher le calendrier 
   const handleToggleCalendar = () => {
     setShowCalendar(!showCalendar);
   };
 
+  //Requete recuperer les events afficher le calendrier d'un utilisateur 
   const handleCalendar = () => {
     fetch(`${API_URL}/calendrier-user`, {
       method: 'GET',
@@ -118,6 +124,7 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
       });
   };
 
+  //Requete pour recuperer les events et afficher le calendrier d'un groupe 
   const handleCalendarGroup = () => {
     fetch(`${API_URL}/calendrier-groupe`, {
       method: 'POST',
@@ -142,6 +149,7 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
       });
   };
 
+  //Requete pour récuperer les inforamtions d'un groupe et afficher la page d'information 
   const handleGroupPress = (groupId) => {
     fetch(`${API_URL}/groupe-details`, {
       method: 'POST',
@@ -175,6 +183,7 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
       });
   };
 
+  //Requete pour ajouter un event a un utilisateur 
   const handleAddEventUser = () => {
 
     if (!Titre.trim()) {
@@ -213,6 +222,7 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
       });
   };
 
+  //Requete ajouter un event a un groupe 
   const handleAddEventGroupe = () => {
 
     if (!Titre2.trim()) {
@@ -252,6 +262,7 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
       });
   };
 
+  //Requete pour se déconnecter 
   const deconnexion = () => {
     fetch(`${API_URL}/deconnexion`, {
       method: 'GET',
@@ -277,6 +288,7 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
       });
   };
 
+  //Requete pour supprimer un groupe si on en est l'admin 
   const supprimer_groupe = () => {
     fetch(`${API_URL}/supprime-groupe`, {
       method: 'POST',
@@ -298,6 +310,7 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
       });
   };
 
+  //Requete pour quitter un groupe 
   const quitter_groupe = () => {
     fetch(`${API_URL}/quitter-groupe`, {
       method: 'POST',
@@ -319,6 +332,7 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
       });
   };
 
+  //Fonction pour copie dans le presse papier l'id d'un groupe 
   const handleCopyGroupId = () => {
     if (selectedGroup) {
       Clipboard.setString(selectedGroup.id);
@@ -326,6 +340,7 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
     }
   };
 
+  //Requete pour rafraichir la page d'acceuil 
   const refreshPage = () => {
     setRefreshing(true);
     // Effectuez ici la requête pour obtenir les données de l'utilisateur
@@ -368,7 +383,7 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
 
   return (
     <View style={styles.container}>
-      {!showCalendar && !selectedGroup ? (
+      {!showCalendar && !selectedGroup ? ( //Si on ne veux pas afficher de calendrier ni de groupe alors on affiche la page d'accueil 
         <View style={styles.container}>
           <Text style={styles.welcome}>Bienvenue, {username}!</Text>
           <ScrollView 
@@ -377,12 +392,12 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
                 refreshing={refreshing}
                 onRefresh={refreshPage}
               />
-            }
-            showsVerticalScrollIndicator={false}>
-
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Ajouter un événement au calendrier</Text>
-                <TextInput
+            } 
+            showsVerticalScrollIndicator={false}> 
+            
+            <View style={styles.section}> 
+                <Text style={styles.sectionTitle}>Ajouter un événement au calendrier</Text> 
+                <TextInput //Section pour ajouter saisir les information d'un event de l'utilisateur 
                   style={styles.input_events}
                   placeholder="Titre de l'événement"
                   onChangeText={(text) => setTitre(text)}
@@ -415,10 +430,10 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
               </View>
             
     
-            <View style={styles.section}>
+            <View style={styles.section}> 
               <Text style={styles.sectionTitle}>Créer un nouveau groupe</Text>
               <View style={styles.inputContainer}>
-                <TextInput
+                <TextInput //Section pour creer un nouveau groupe 
                   style={styles.input}
                   placeholder="Nom du nouveau groupe"
                   onChangeText={(text) => setNewGroupName(text)}
@@ -436,7 +451,7 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Rejoindre un groupe</Text>
               <View style={styles.inputContainer}>
-                <TextInput
+                <TextInput //Section pour rejoindre un groupe 
                   style={styles.input}
                   placeholder="Identifiant du groupe"
                   onChangeText={(text) => setGroupAdd(text)}
@@ -454,7 +469,7 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Vos groupes :</Text>
               <ScrollView style={styles.groupList} showsVerticalScrollIndicator={false}>
-                {groupList.map((groupe) => (
+                {groupList.map((groupe) => ( //Affiche la liste des groupes de l'user 
                   <TouchableOpacity
                     key={groupe.id}
                     onPress={() => handleGroupPress(groupe.id)}
@@ -466,17 +481,17 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
               </ScrollView>
             </View>
     
-            <View>
-              <TouchableOpacity
+            <View> 
+              <TouchableOpacity //Affiche un bouton pour pouvoir afficher le calendrier de l'utilisateur 
                 style={styles.button2}
                 onPress={handleCalendar}
-              >
+              > 
                 <Text style={styles.buttonText}>Mon Calendrier</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> 
             </View>
             
             <View>
-              <TouchableOpacity
+              <TouchableOpacity // Bouton de déconnexion 
                 style={styles.button3}
                 onPress={deconnexion}
               >
@@ -485,7 +500,7 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
             </View>
           </ScrollView>
         </View>
-      ) : showCalendar ? (
+      ) : showCalendar ? ( // Page d'affichage du calendrier  
         <View style={{ flex: 1 }}>
           <View style={[styles.calendarContainer, { height: calendarContainerHeight, marginTop: calendarMarginTop }]}>
             <EventCalendar
@@ -501,7 +516,7 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
             />
           </View>
         </View>
-      ) : selectedGroup ? (
+      ) : selectedGroup ? ( //Page d'information sur un groupe 
         <View style={styles.containerGroupe}>
           <Text style={styles.welcome}>Details du groupe: {selectedGroup.nom}</Text>
           <Text style={styles.sectionTitle}>Identifiant: "
@@ -576,7 +591,7 @@ const HomeScreen = ({ userId, username, groupList, setGroupList, setUserId, setL
   );
 };
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ //Style de la page 
   container: {
     flex: 1,
     padding: 3,

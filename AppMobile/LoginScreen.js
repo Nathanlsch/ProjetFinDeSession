@@ -5,6 +5,7 @@ import API_URL from './config';
 const LoginScreen = ({ onLogin }) => {
   const [userId, setUserId] = useState('');
 
+  //Fonction faisant une requete au serveur pour récupérer les informations d'un user et le connecter 
   const handleLogin = () => {
 
     if (!userId.trim()) {
@@ -37,21 +38,21 @@ const LoginScreen = ({ onLogin }) => {
   };
 
   return (
+    //Page de connexion demandant l'identifiant de l'utilisateur 
     <View style={styles.container}>
-    
-    <TextInput
-      style={styles.input}
-      placeholder="Entrez votre identifiant"
-      value={userId}
-      onChangeText={text => setUserId(text)}
-    />
-    <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-      <Text style={styles.buttonText}>Se connecter</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.registerLink} onPress={() => Alert.alert("Pour pouvoir se connecter, il vous faut avoir récupéré votre identifiant depuis la page Web de l'application")}>
-      <Text style={styles.registerText}>Vous n'avez pas d'identifiant ?</Text>
-    </TouchableOpacity>
-  </View>
+      <TextInput
+        style={styles.input}
+        placeholder="Entrez votre identifiant"
+        value={userId}
+        onChangeText={text => setUserId(text)}
+      />
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Se connecter</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.registerLink} onPress={() => Alert.alert("Pour pouvoir se connecter, il vous faut avoir récupéré votre identifiant depuis la page Web de l'application")}>
+        <Text style={styles.registerText}>Vous n'avez pas d'identifiant ?</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
